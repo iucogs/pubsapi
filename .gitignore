@@ -1,0 +1,5 @@
+*.pyc
+*.swp
+
+sandbox
+*.egg-info

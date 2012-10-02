@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Table
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -40,6 +40,21 @@ class Author(Base):
         return "<Author %d: %s %s>" %\
             (self.author_id, self.firstname, self.lastname)
 
+    @property
+    def json(self):
+        return {'author_id' : self.author_id,
+            'firstname' : self.firstname,
+            'lastname' : self.lastname}
+
+#TODO: Change keys after schema is fixed
+similar_to = Table('similar_to', Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('citation_id1', Integer, ForeignKey('citations.citation_id')),
+    Column('citation_id2', Integer, ForeignKey('citations.citation_id')),
+    Column('lastname_ratio', Float),
+    Column('year_ratio', Float),
+    Column('title_ratio', Float))
+
 class Citation(Base):
     __tablename__ = 'citations'
     __table_args__ = {'autoload' : True}
@@ -49,9 +64,30 @@ class Citation(Base):
 
     authors = relationship("Author", secondary=author_of, backref='citations') 
 
+    possible_matches = relationship("Citation", secondary=similar_to,
+        primaryjoin=citation_id==similar_to.c.citation_id1,
+        secondaryjoin=citation_id==similar_to.c.citation_id2
+        )
+
     def __repr__(self):
         return "<Citation %d: %s (%s)>" %\
             (self.citation_id, self.title, self.year)
+
+    @property
+    def json(self):
+        attrs =\
+            ['pubtype', 'abstract', 'keywords', 'doi', 'url', 'address',
+             'booktitle', 'chapter', 'crossref', 'edition', 'editor',
+             'translator', 'howpublished', 'institution', 'journal',
+             'bibtex_key', 'month', 'note', 'number', 'organization',
+             'pages', 'publisher', 'location', 'school', 'series', 'title',
+             'type', 'volume', 'year', 'raw', 'verified', 'last_modified',
+             'entryTime', 'citation_id']
+        struct = { 'authors' : [a.json for a in self.authors] }
+        for attr in attrs:
+            struct[attr] = getattr(self, attr, None)
+
+        return struct
 
 member_of_collection = Table('member_of_collection', Base.metadata,
     Column('collection_id', Integer, ForeignKey('collections.collection_id')),
@@ -68,7 +104,8 @@ class Collection(Base):
     # TODO: Fix bug so that owners are actually referenced by user_id
     # user_id = Column(Integer, ForeignKey('users.id'))
 
-    citations = relationship("Citation", secondary=member_of_collection)
+    citations = relationship("Citation", secondary=member_of_collection,
+        backref='collections')
 
     def __repr__(self):
         return "<Collection %d: %s (%s)>" %\

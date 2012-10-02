@@ -17,6 +17,7 @@ Base.metadata.bind = engine
 Session = sessionmaker(bind=engine)
 session = Session()
 
+# Author-related tables
 author_of = Table('author_of', Base.metadata,
     Column('author_id', Integer, ForeignKey('authors.author_id')),
     Column('citation_id', Integer, ForeignKey('citations.citation_id')),
@@ -46,6 +47,9 @@ class Author(Base):
             'firstname' : self.firstname,
             'lastname' : self.lastname}
 
+
+
+# Citation-related tables
 #TODO: Change keys after schema is fixed
 similar_to = Table('similar_to', Base.metadata,
     Column('id', Integer, primary_key=True),
@@ -89,6 +93,9 @@ class Citation(Base):
 
         return struct
 
+
+
+# Collection-related tables
 member_of_collection = Table('member_of_collection', Base.metadata,
     Column('collection_id', Integer, ForeignKey('collections.collection_id')),
     Column('citation_id', Integer, ForeignKey('citations.citation_id'))
@@ -111,6 +118,11 @@ class Collection(Base):
         return "<Collection %d: %s (%s)>" %\
             (self.collection_id, self.collection_name, self.owner)
 
+
+
+# User-related tables
+# TODO: Add relations to Citations and Collections.
+# TODO: Add proxy support
 class User(Base):
     __tablename__ = 'users'
 

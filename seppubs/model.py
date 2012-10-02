@@ -49,7 +49,42 @@ class Citation(Base):
 
     authors = relationship("Author", secondary=author_of, backref='citations') 
 
-
     def __repr__(self):
         return "<Citation %d: %s (%s)>" %\
             (self.citation_id, self.title, self.year)
+
+member_of_collection = Table('member_of_collection', Base.metadata,
+    Column('collection_id', Integer, ForeignKey('collections.collection_id')),
+    Column('citation_id', Integer, ForeignKey('citations.citation_id'))
+    )
+
+class Collection(Base):
+    __tablename__ = 'collections'
+    __table_args__ = {'autoload' : True}
+    
+    collection_id = Column(Integer, primary_key=True)
+    collection_name = Column(String)
+   
+    # TODO: Fix bug so that owners are actually referenced by user_id
+    # user_id = Column(Integer, ForeignKey('users.id'))
+
+    citations = relationship("Citation", secondary=member_of_collection)
+
+    def __repr__(self):
+        return "<Collection %d: %s (%s)>" %\
+            (self.collection_id, self.collection_name, self.owner)
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String)
+    lastname = Column(String)
+    firstname = Column(String)
+    admin = Column(Boolean)
+    cogs = Column(Boolean)
+
+    def __repr__(self):
+        return "<User %d: %s>" %\
+            (self.id, self.username)
+

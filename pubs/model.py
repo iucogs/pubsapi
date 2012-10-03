@@ -3,10 +3,10 @@ from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Tabl
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 
-import seppubs.config
+import pubs.config
 
 # Create the database engine from config file
-url = seppubs.config.get('sqlalchemy', 'url')
+url = pubs.config.get('sqlalchemy', 'url')
 engine = create_engine(url, echo=False, pool_recycle=30) 
 
 # configure the declarative syntax base

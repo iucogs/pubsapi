@@ -2,8 +2,8 @@
 from distutils.core import setup
 import setuptools
 setup(
-    name = "seppubs",
-    packages = ["seppubs"],
+    name = "pubs",
+    packages = ["pubs"],
     version = "0.1",
     description = "IU COGS Pubs API",
     author = "IU Cognitive Science Program",

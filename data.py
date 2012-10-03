@@ -3,8 +3,8 @@ Script to dump SEP publications for Katy's group.
 """
 import json
 
-from seppubs.model import *
-import seppubs.lib
+from pubs.model import *
+import pubs.lib
 
 # create a placeholder for the JSON data
 citations = dict()
@@ -24,4 +24,4 @@ for c in session.query(Citation).all():
         }
 
 # simply print to the console to allow flexibility for file piping
-print seppubs.lib.json(citations)
+print pubs.lib.json(citations)

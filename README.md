@@ -16,3 +16,27 @@ format:
     }
 
 This will then be used by the HTRC-DID team for citation analysis.
+
+Installing the ORM
+----------------------
+'''
+git clone git@github.com:inpho/seppubs.git
+cd seppubs
+virtualenv sandbox
+source sandbox/bin/activate
+python setup.py develop
+'''
+
+Configure pubs.ini from pubs.ini.template with the proper username and password.
+
+Using the ORM:
+
+'''python
+from seppubs.model import *
+
+first_collection = session.query(Collection).first()
+
+for citation in first_collection.citations:
+    print citation.title
+
+'''

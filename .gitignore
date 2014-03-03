@@ -2,5 +2,6 @@
 *.swp
 
 sandbox
+pubsenv
 *.egg-info
 pubs.ini

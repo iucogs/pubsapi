@@ -21,9 +21,9 @@ Installing the ORM
 ----------------------
 
     git clone git@github.com:iucogs/pubsapi.git
-    cd seppubs
-    virtualenv sandbox
-    source sandbox/bin/activate
+    cd pubsapi
+    virtualenv pubsenv
+    source pubsenv/bin/activate
     python setup.py develop
 
 Configure pubs.ini from pubs.ini.template with the proper username and password.

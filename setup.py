@@ -25,6 +25,7 @@ setup(
         ],
     install_requires=[
         "SQLAlchemy>=0.7.0,<=0.7.99",
+        "bottle>=0.12"
     ],
 
     long_description = """\

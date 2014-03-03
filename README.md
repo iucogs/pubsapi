@@ -22,7 +22,7 @@ Installing the ORM
 
     git clone git@github.com:iucogs/pubsapi.git
     cd pubsapi
-    virtualenv pubsenv
+    virtualenv --system-site-packages pubsenv
     source pubsenv/bin/activate
     python setup.py develop
 

@@ -15,7 +15,7 @@ Base.metadata.bind = engine
 
 # configure the default Session
 Session = sessionmaker(bind=engine)
-session = Session()
+Session = Session()
 
 # Author-related tables
 author_of = Table('author_of', Base.metadata,
@@ -63,8 +63,9 @@ class Citation(Base):
     __tablename__ = 'citations'
     __table_args__ = {'autoload' : True}
 
+    # TODO: Fix bug so that owners are actually referenced by user_id
+    #user_id = Column(Integer, ForeignKey('users.user_id'))
     citation_id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'))
 
     authors = relationship("Author", secondary=author_of, backref='citations') 
 
